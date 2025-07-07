@@ -2,12 +2,17 @@ package com.spring_boot.demo.Controller;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.spring_boot.demo.Exception.ResourceNotFoundException;
 import com.spring_boot.demo.Model.User;
 import com.spring_boot.demo.entity.UserEntity;
 import com.spring_boot.demo.repository.UserRepository;
@@ -31,6 +36,16 @@ public class UserController {
 //					new User(3L,"Surey","Surey@gmail.com"));
 			return userRepository.findAll();
 	}
+		@PostMapping
+		public UserEntity createUser(@RequestBody UserEntity user) {
+			return userRepository.save(user);
+			
+		}
+		
+		@GetMapping("/{id}")
+		public UserEntity getUserById(@PathVariable Long id) {
+			return userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found with this id : "+id));
+		}
 		
 
 }
